@@ -58,12 +58,6 @@ def generate_launch_description() -> LaunchDescription:
                 }],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-            ComposableNode(
-                package='image_view',
-                plugin='image_view::ImageViewNode',
-                remappings=[('/image', '/camera/image_raw')],
-                extra_arguments=[{'use_intra_process_comms': True}],
-            ),
         ],
     )
 
