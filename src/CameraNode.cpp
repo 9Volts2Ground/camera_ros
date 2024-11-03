@@ -66,10 +66,11 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
 namespace enc = sensor_msgs::image_encodings;
 namespace rclcpp
 {
-class NodeOptions;
+  class NodeOptions;
 }
 
 

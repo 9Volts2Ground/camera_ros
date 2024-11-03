@@ -5,8 +5,8 @@
 
 namespace libcamera
 {
-class ControlId;
-class ControlValue;
+  class ControlId;
+  class ControlValue;
 } // namespace libcamera
 
 
@@ -17,8 +17,6 @@ public:
 };
 
 
-rclcpp::ParameterValue
-cv_to_pv(const libcamera::ControlValue &value);
+rclcpp::ParameterValue cv_to_pv(const libcamera::ControlValue &value);
 
-rclcpp::ParameterType
-cv_to_pv_type(const libcamera::ControlId *const id);
+rclcpp::ParameterType cv_to_pv_type(const libcamera::ControlId *const id);
