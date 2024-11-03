@@ -1,4 +1,4 @@
-#include "parameter_conflict_check.hpp"
+#include "camera_ros/parameter_conflict_check.hpp"
 #include <algorithm>
 #include <rclcpp/parameter.hpp>
 

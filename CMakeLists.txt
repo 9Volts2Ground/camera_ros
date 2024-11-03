@@ -12,11 +12,11 @@ find_package(PkgConfig REQUIRED)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(camera_info_manager REQUIRED)
+find_package(cv_bridge REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(camera_info_manager REQUIRED)
-find_package(cv_bridge REQUIRED)
 pkg_check_modules(libcamera REQUIRED libcamera>=0.1)
 
 # library with common utility functions for type conversions
@@ -30,7 +30,11 @@ add_library(utils OBJECT
   src/types.cpp
   src/type_extent.cpp
 )
-target_include_directories(utils PUBLIC ${libcamera_INCLUDE_DIRS})
+target_include_directories(utils PUBLIC
+  ${libcamera_INCLUDE_DIRS}
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+
 target_link_libraries(utils ${libcamera_LINK_LIBRARIES})
 ament_target_dependencies(
   utils
@@ -40,8 +44,13 @@ ament_target_dependencies(
 set_property(TARGET utils PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # composable ROS2 node
-add_library(camera_component SHARED src/CameraNode.cpp)
-rclcpp_components_register_node(camera_component PLUGIN "camera::CameraNode" EXECUTABLE "camera_node")
+add_library(
+  camera_component SHARED
+    src/CameraNode.cpp)
+rclcpp_components_register_node(
+  camera_component
+  PLUGIN "camera::CameraNode"
+  EXECUTABLE "camera_node")
 
 target_include_directories(camera_component PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

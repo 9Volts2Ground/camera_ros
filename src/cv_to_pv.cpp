@@ -1,6 +1,6 @@
-#include "cv_to_pv.hpp"
-#include "type_extent.hpp"
-#include "types.hpp"
+#include "camera_ros/cv_to_pv.hpp"
+#include "camera_ros/type_extent.hpp"
+#include "camera_ros/types.hpp"
 #include <cstdint>
 #include <libcamera/base/span.h>
 #include <libcamera/controls.h>

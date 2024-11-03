@@ -1,5 +1,5 @@
-#include "pv_to_cv.hpp"
-#include "types.hpp"
+#include "camera_ros/pv_to_cv.hpp"
+#include "camera_ros/types.hpp"
 #include <cstdint>
 #include <libcamera/base/span.h>
 #include <libcamera/controls.h>

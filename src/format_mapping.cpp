@@ -1,4 +1,4 @@
-#include "format_mapping.hpp"
+#include "camera_ros/format_mapping.hpp"
 #include <cstdint>
 #include <libcamera/formats.h>
 #include <libcamera/geometry.h>

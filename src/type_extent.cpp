@@ -1,4 +1,4 @@
-#include "type_extent.hpp"
+#include "camera_ros/type_extent.hpp"
 #include <libcamera/base/span.h>
 #include <libcamera/control_ids.h>
 #include <libcamera/controls.h>
