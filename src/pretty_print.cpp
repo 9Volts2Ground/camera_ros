@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-
+//=========================================================
 std::ostream &
 operator<<(std::ostream &out, const libcamera::CameraManager &camera_manager)
 {
@@ -28,6 +28,7 @@ operator<<(std::ostream &out, const libcamera::CameraManager &camera_manager)
   return out;
 }
 
+//=========================================================
 std::ostream &
 operator<<(std::ostream &out, const libcamera::StreamFormats &formats)
 {
@@ -43,6 +44,7 @@ operator<<(std::ostream &out, const libcamera::StreamFormats &formats)
   return out;
 }
 
+//=========================================================
 std::ostream &
 operator<<(std::ostream &out, const libcamera::StreamConfiguration &configuration)
 {

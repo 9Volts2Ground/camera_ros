@@ -27,9 +27,12 @@
   template ControlTypeMap<libcamera::ControlType##T>::type max<libcamera::ControlType##T>( \
     const libcamera::ControlValue &);
 
+//=========================================================
 template<enum libcamera::ControlType T>
 typename ControlTypeMap<T>::type
-min(const libcamera::ControlValue &value)
+min(
+  const libcamera::ControlValue &value
+)
 {
   using A = typename ControlTypeMap<T>::type;
   using S = libcamera::Span<const A>;
@@ -43,9 +46,12 @@ min(const libcamera::ControlValue &value)
   }
 }
 
+//=========================================================
 template<enum libcamera::ControlType T>
 typename ControlTypeMap<T>::type
-max(const libcamera::ControlValue &value)
+max(
+  const libcamera::ControlValue &value
+)
 {
   using A = typename ControlTypeMap<T>::type;
   using S = libcamera::Span<const A>;
@@ -67,10 +73,14 @@ MAX(Integer32)
 MAX(Integer64)
 MAX(Float)
 
+//=========================================================
 namespace std
 {
-CTRectangle
-clamp(const CTRectangle &val, const CTRectangle &lo, const CTRectangle &hi)
+CTRectangle clamp(
+  const CTRectangle &val, 
+  const CTRectangle &lo, 
+  const CTRectangle &hi
+)
 {
   const int x = std::clamp(val.x, lo.x, hi.x);
   const int y = std::clamp(val.y, lo.y, hi.y);
@@ -82,10 +92,12 @@ clamp(const CTRectangle &val, const CTRectangle &lo, const CTRectangle &hi)
 } // namespace std
 
 
-template<typename T>
-libcamera::ControlValue
-clamp_array(const libcamera::ControlValue &value, const libcamera::ControlValue &min,
-            const libcamera::ControlValue &max)
+//=========================================================
+template<typename T>libcamera::ControlValue clamp_array(
+  const libcamera::ControlValue &value, 
+  const libcamera::ControlValue &min,
+  const libcamera::ControlValue &max
+)
 {
   const libcamera::Span<const T> v = value.get<libcamera::Span<const T>>();
   const libcamera::Span<const T> a = min.get<libcamera::Span<const T>>();
@@ -99,27 +111,39 @@ clamp_array(const libcamera::ControlValue &value, const libcamera::ControlValue 
   return libcamera::ControlValue(libcamera::Span<const T>(vclamp));
 }
 
+//=========================================================
 template<typename T,
          std::enable_if_t<!std::is_same<std::remove_cv_t<T>, CTBool>::value, bool> = true>
 libcamera::ControlValue
-clamp(const libcamera::ControlValue &value, const libcamera::ControlValue &min,
-      const libcamera::ControlValue &max)
+clamp(
+  const libcamera::ControlValue &value, 
+  const libcamera::ControlValue &min,
+  const libcamera::ControlValue &max
+)
 {
   return value.isArray() ? clamp_array<T>(value, min, max)
                          : std::clamp(value.get<T>(), min.get<T>(), max.get<T>());
 }
 
+//=========================================================
 template<typename T, std::enable_if_t<std::is_same<std::remove_cv_t<T>, CTBool>::value, bool> = true>
 const libcamera::ControlValue &
-clamp(const libcamera::ControlValue &value, const libcamera::ControlValue & /*min*/,
-      const libcamera::ControlValue & /*max*/)
+clamp(
+  const libcamera::ControlValue &value, 
+  const libcamera::ControlValue & /*min*/,
+  const libcamera::ControlValue & /*max*/
+)
 {
   return value;
 }
 
+//=========================================================
 libcamera::ControlValue
-clamp(const libcamera::ControlValue &value, const libcamera::ControlValue &min,
-      const libcamera::ControlValue &max)
+clamp(
+  const libcamera::ControlValue &value, 
+  const libcamera::ControlValue &min,
+  const libcamera::ControlValue &max
+)
 {
   if (min.type() != max.type())
     throw std::runtime_error("minimum (" + std::to_string(min.type()) + ") and maximum (" +
@@ -140,7 +164,7 @@ clamp(const libcamera::ControlValue &value, const libcamera::ControlValue &min,
   return {};
 }
 
-
+//=========================================================
 bool
 operator<(const libcamera::Rectangle &lhs, const libcamera::Rectangle &rhs)
 {
@@ -149,6 +173,7 @@ operator<(const libcamera::Rectangle &lhs, const libcamera::Rectangle &rhs)
          (lhs.y + lhs.height) < (rhs.y + rhs.height);
 }
 
+//=========================================================
 bool
 operator>(const libcamera::Rectangle &lhs, const libcamera::Rectangle &rhs)
 {
@@ -157,9 +182,13 @@ operator>(const libcamera::Rectangle &lhs, const libcamera::Rectangle &rhs)
          (lhs.y + lhs.height) > (rhs.y + rhs.height);
 }
 
+//=========================================================
 template<typename T>
 bool
-less(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs)
+less(
+  const libcamera::ControlValue &lhs, 
+  const libcamera::ControlValue &rhs
+)
 {
   if (lhs.isArray()) {
     const libcamera::Span<const T> va = lhs.get<libcamera::Span<const T>>();
@@ -197,9 +226,13 @@ less(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs)
   }
 }
 
+//=========================================================
 template<typename T>
 bool
-greater(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs)
+greater(
+  const libcamera::ControlValue &lhs, 
+  const libcamera::ControlValue &rhs
+)
 {
   if (lhs.isArray()) {
     const libcamera::Span<const T> va = lhs.get<libcamera::Span<const T>>();
@@ -237,14 +270,17 @@ greater(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs)
   }
 }
 
+//=========================================================
 #define CASE_LESS(T)              \
   case libcamera::ControlType##T: \
     return less<ControlTypeMap<libcamera::ControlType##T>::type>(lhs, rhs);
 
+//=========================================================
 #define CASE_GREATER(T)           \
   case libcamera::ControlType##T: \
     return greater<ControlTypeMap<libcamera::ControlType##T>::type>(lhs, rhs);
 
+//=========================================================
 bool
 operator<(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs)
 {
@@ -266,6 +302,7 @@ operator<(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs
   throw std::runtime_error("unhandled control type " + std::to_string(lhs.type()));
 }
 
+//=========================================================
 bool
 operator>(const libcamera::ControlValue &lhs, const libcamera::ControlValue &rhs)
 {

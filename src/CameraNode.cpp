@@ -76,6 +76,8 @@ namespace rclcpp
 
 namespace camera
 {
+
+//=========================================================
 class CameraNode : public rclcpp::Node
 {
 public:
@@ -136,9 +138,10 @@ private:
 
 RCLCPP_COMPONENTS_REGISTER_NODE(camera::CameraNode)
 
-
-libcamera::StreamRole
-get_role(const std::string &role)
+//=========================================================
+libcamera::StreamRole get_role(
+  const std::string &role
+)
 {
   static const std::unordered_map<std::string, libcamera::StreamRole> roles_map = {
     {"raw", libcamera::StreamRole::Raw},
@@ -155,14 +158,15 @@ get_role(const std::string &role)
   }
 }
 
-
+//=========================================================
 // The following function "compressImageMsg" is adapted from "CvImage::toCompressedImageMsg"
 // (https://github.com/ros-perception/vision_opencv/blob/066793a23e5d06d76c78ca3d69824a501c3554fd/cv_bridge/src/cv_bridge.cpp#L512-L535)
 // and covered by the BSD-3-Clause licence.
-void
-compressImageMsg(const sensor_msgs::msg::Image &source,
-                 sensor_msgs::msg::CompressedImage &destination,
-                 const std::vector<int> &params = std::vector<int>())
+void compressImageMsg(
+  const sensor_msgs::msg::Image &source,
+  sensor_msgs::msg::CompressedImage &destination,
+  const std::vector<int> &params = std::vector<int>()
+)
 {
   std::shared_ptr<CameraNode> tracked_object;
   cv_bridge::CvImageConstPtr cv_ptr = cv_bridge::toCvShare(source, tracked_object);
@@ -190,8 +194,12 @@ compressImageMsg(const sensor_msgs::msg::Image &source,
   cv::imencode(".jpg", image, destination.data, params);
 }
 
-
-CameraNode::CameraNode(const rclcpp::NodeOptions &options) : Node("camera", options), cim(this)
+//=========================================================
+// Constructor
+CameraNode::CameraNode(
+  const rclcpp::NodeOptions &options
+): 
+Node("camera", options), cim(this)
 {
   // pixel format
   rcl_interfaces::msg::ParameterDescriptor param_descr_format;
@@ -449,6 +457,8 @@ CameraNode::CameraNode(const rclcpp::NodeOptions &options) : Node("camera", opti
     camera->queueRequest(request.get());
 }
 
+//=========================================================
+// Destructor
 CameraNode::~CameraNode()
 {
   // stop request processing threads
@@ -469,8 +479,8 @@ CameraNode::~CameraNode()
       std::cerr << "munmap failed: " << std::strerror(errno) << std::endl;
 }
 
-void
-CameraNode::declareParameters()
+//=========================================================
+void CameraNode::declareParameters()
 {
   // dynamic camera configuration
   ParameterMap parameters_init;
@@ -587,14 +597,14 @@ CameraNode::declareParameters()
   set_parameters(parameters_init_list);
 }
 
-void
-CameraNode::requestComplete(libcamera::Request *const request)
+//=========================================================
+void CameraNode::requestComplete(libcamera::Request *const request)
 {
   request_locks[request]->unlock();
 }
 
-void
-CameraNode::process(libcamera::Request *const request)
+//=========================================================
+void CameraNode::process(libcamera::Request *const request)
 {
   while (running) {
     // block until request is available
@@ -688,8 +698,10 @@ CameraNode::process(libcamera::Request *const request)
   }
 }
 
-rcl_interfaces::msg::SetParametersResult
-CameraNode::onParameterChange(const std::vector<rclcpp::Parameter> &parameters)
+//=========================================================
+rcl_interfaces::msg::SetParametersResult CameraNode::onParameterChange(
+  const std::vector<rclcpp::Parameter> &parameters
+)
 {
   rcl_interfaces::msg::SetParametersResult result;
 

@@ -8,9 +8,11 @@
 #include <rclcpp/parameter_value.hpp>
 #include <vector>
 
-
-libcamera::ControlValue
-pv_to_cv_int_array(const std::vector<int64_t> &values, const libcamera::ControlType &type)
+//=========================================================
+libcamera::ControlValue pv_to_cv_int_array(
+  const std::vector<int64_t> &values, 
+  const libcamera::ControlType &type
+)
 {
   // convert to Span (Integer32, Integer64) or geometric type Rectangle, Size
   switch (type) {
@@ -28,8 +30,11 @@ pv_to_cv_int_array(const std::vector<int64_t> &values, const libcamera::ControlT
   }
 }
 
-libcamera::ControlValue
-pv_to_cv(const rclcpp::Parameter &parameter, const libcamera::ControlType &type)
+//=========================================================
+libcamera::ControlValue pv_to_cv(
+  const rclcpp::Parameter &parameter, 
+  const libcamera::ControlType &type
+)
 {
   switch (parameter.get_type()) {
   case rclcpp::ParameterType::PARAMETER_NOT_SET:
