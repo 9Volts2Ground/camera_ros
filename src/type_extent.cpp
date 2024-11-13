@@ -14,7 +14,7 @@
    (major == LIBCAMERA_VERSION_MAJOR && minor == LIBCAMERA_VERSION_MINOR && \
     patch <= LIBCAMERA_VERSION_PATCH))
 
-
+//=========================================================
 template<typename T, std::enable_if_t<!libcamera::details::is_span<T>::value, bool> = true>
 std::size_t
 get_extent(const libcamera::Control<T> &)
@@ -23,6 +23,7 @@ get_extent(const libcamera::Control<T> &)
   return 0;
 }
 
+//=========================================================
 template<typename T, std::enable_if_t<libcamera::details::is_span<T>::value, bool> = true>
 std::size_t
 get_extent(const libcamera::Control<T> &)
@@ -39,7 +40,7 @@ get_extent(const libcamera::Control<T> &)
   if (id->id() == libcamera::controls::T.id()) \
     return get_extent(libcamera::controls::T);
 
-
+//=========================================================
 std::size_t
 get_extent(const libcamera::ControlId *const id)
 {

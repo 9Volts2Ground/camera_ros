@@ -198,7 +198,7 @@ void compressImageMsg(
 // Constructor
 CameraNode::CameraNode(
   const rclcpp::NodeOptions &options
-): 
+):
 Node("camera", options), cim(this)
 {
   // pixel format
@@ -235,6 +235,7 @@ Node("camera", options), cim(this)
   jpeg_quality_description.integer_range = {jpeg_range};
   // default to 95
   jpeg_quality = declare_parameter<uint8_t>("jpeg_quality", 95, jpeg_quality_description);
+
   // publisher for raw and compressed image
   pub_image = this->create_publisher<sensor_msgs::msg::Image>("~/image_raw", 1);
   pub_image_compressed =
@@ -340,8 +341,9 @@ Node("camera", options), cim(this)
   if (size.isNull()) {
     RCLCPP_INFO_STREAM(get_logger(), scfg);
     RCLCPP_WARN_STREAM(get_logger(),
-                       "no dimensions selected, auto-selecting: \"" << scfg.size << "\"");
-    RCLCPP_WARN_STREAM(get_logger(), "set parameter 'width' or 'height' to silence this warning");
+      "no dimensions selected, auto-selecting: \"" << scfg.size << "\"");
+    RCLCPP_WARN_STREAM(get_logger(),
+      "set parameter 'width' or 'height' to silence this warning");
   }
   else {
     scfg.size = size;
@@ -598,13 +600,17 @@ void CameraNode::declareParameters()
 }
 
 //=========================================================
-void CameraNode::requestComplete(libcamera::Request *const request)
+void CameraNode::requestComplete(
+  libcamera::Request *const request
+)
 {
   request_locks[request]->unlock();
 }
 
 //=========================================================
-void CameraNode::process(libcamera::Request *const request)
+void CameraNode::process(
+  libcamera::Request *const request
+)
 {
   while (running) {
     // block until request is available
@@ -617,12 +623,14 @@ void CameraNode::process(libcamera::Request *const request)
       const libcamera::FrameBuffer *buffer = request->findBuffer(stream);
       const libcamera::FrameMetadata &metadata = buffer->metadata();
       size_t bytesused = 0;
-      for (const libcamera::FrameMetadata::Plane &plane : metadata.planes())
+      for (const libcamera::FrameMetadata::Plane &plane : metadata.planes()){
         bytesused += plane.bytesused;
+      }
 
       // set time offset once for accurate timing using the device time
-      if (time_offset == 0)
+      if (time_offset == 0){
         time_offset = this->now().nanoseconds() - metadata.timestamp;
+      }
 
       // send image data
       std_msgs::msg::Header hdr;
